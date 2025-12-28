@@ -17,20 +17,20 @@
       --muted:rgba(255,255,255,.65);
       --shadow:0 28px 80px rgba(0,0,0,.62);
 
-      /* Chat layout */
+      /* Layout */
       --chat-gap:18px;
       --chat-width:min(30vw,420px);
       --chat-height:min(78vh,720px);
 
-      /* Chat theme (einheitlich grau + weiße Schrift) */
+      /* Chat Theme */
       --chat-bg:#0f1117;
       --chat-panel:#141722;
       --chat-border:rgba(255,255,255,.12);
       --chat-text:rgba(255,255,255,.92);
       --chat-muted:rgba(255,255,255,.62);
-      --chat-bubble-bot:rgba(255,255,255,.07);
-      --chat-bubble-user:rgba(255,255,255,.10);
-      --chat-accent:#ffffff; /* Buttons/Outline weiß */
+      --chat-bot:rgba(255,255,255,.07);
+      --chat-user:rgba(255,255,255,.10);
+      --chat-accent:#ffffff;
     }
 
     *{box-sizing:border-box}
@@ -96,159 +96,175 @@
     ul{margin:0; padding-left:18px; color:var(--muted); line-height:1.6}
     @media(max-width:900px){ .grid{grid-template-columns:1fr} }
 
-    /* ===============================
-       n8n CHAT – Position & Größe
-       =============================== */
-    .n8n-chat{
-      --chat-button-right: var(--chat-gap);
-      --chat-button-bottom: var(--chat-gap);
+    /* =========================================================
+       n8n CHAT – WICHTIG:
+       n8n nutzt CSS Variablen (z.B. --chat--toggle--background).
+       Deshalb überschreiben wir Variablen DIREKT auf #n8n-chat.
+       ========================================================= */
+
+    /* Theme-Variablen (hart überschreiben) */
+    #n8n-chat{
+      --chat--font-family: inherit !important;
+
+      --chat--text-color: var(--chat-text) !important;
+      --chat--muted-color: var(--chat-muted) !important;
+
+      --chat--window--background: var(--chat-panel) !important;
+      --chat--border-color: var(--chat-border) !important;
+
+      /* Toggle Button (Floating Icon) */
+      --chat--toggle--background: rgba(255,255,255,.08) !important;
+      --chat--toggle--color: var(--chat-text) !important;
+      --chat--toggle--border: 1px solid rgba(255,255,255,.20) !important;
+
+      /* Header */
+      --chat--header--background: rgba(255,255,255,.06) !important;
+      --chat--header--color: var(--chat-text) !important;
+
+      /* Messages */
+      --chat--messages--background: var(--chat-bg) !important;
+
+      /* Bubbles */
+      --chat--message--bot--background: var(--chat-bot) !important;
+      --chat--message--bot--color: var(--chat-text) !important;
+      --chat--message--user--background: var(--chat-user) !important;
+      --chat--message--user--color: var(--chat-text) !important;
+
+      /* Input */
+      --chat--input--background: rgba(255,255,255,.04) !important;
+      --chat--input--text-color: var(--chat-text) !important;
+      --chat--input--placeholder-color: var(--chat-muted) !important;
+
+      /* Send Button */
+      --chat--input--send-button--background: transparent !important;
+      --chat--input--send-button--color: var(--chat-accent) !important;
+      --chat--input--send-button--background-hover: rgba(255,255,255,.08) !important;
+      --chat--input--send-button--color-hover: var(--chat-accent) !important;
+
+      /* Position (wenn unterstützt) */
+      --chat--button-right: var(--chat-gap) !important;
+      --chat--button-bottom: var(--chat-gap) !important;
     }
 
-    .n8n-chat-window,
-    .n8n-chat__window,
-    .n8n-chat-window-container,
-    .n8n-chat__window-container{
-      right:var(--chat-gap)!important;
-      bottom:var(--chat-gap)!important;
-      left:auto!important;
-      width:var(--chat-width)!important;
-      height:var(--chat-height)!important;
-      max-width:calc(100vw - (var(--chat-gap) * 2))!important;
-      max-height:calc(100vh - (var(--chat-gap) * 2))!important;
-      border-radius:18px!important;
-      overflow:hidden!important;
-      box-shadow:var(--shadow)!important;
-      border:1px solid var(--chat-border)!important;
-      background:var(--chat-panel)!important;
-      color:var(--chat-text)!important;
+    /* Window-Container / Wrapper (dein Screenshot zeigt .chat-window-wrapper etc.) */
+    #n8n-chat .chat-window-wrapper{
+      position: fixed !important;
+      right: var(--chat-gap) !important;
+      bottom: var(--chat-gap) !important;
+      left: auto !important;
+      z-index: 9999 !important;
       font-family: inherit !important;
     }
 
-    /* Chat wirkt weniger "Widget" */
-    .n8n-chat-window,
-    .n8n-chat__window{
+    /* Das eigentliche Fenster */
+    #n8n-chat .chat-window{
+      width: var(--chat-width) !important;
+      height: var(--chat-height) !important;
+      max-width: calc(100vw - (var(--chat-gap) * 2)) !important;
+      max-height: calc(100vh - (var(--chat-gap) * 2)) !important;
+
+      border-radius: 18px !important;
+      overflow: hidden !important;
+
+      box-shadow: var(--shadow) !important;
+      border: 1px solid var(--chat-border) !important;
+      background: var(--chat-panel) !important;
+      color: var(--chat-text) !important;
       backdrop-filter: blur(10px) !important;
     }
 
-    /* ===============================
-       n8n CHAT – Theme (grau + weiß)
-       =============================== */
+    /* Toggle Button (Floating Button) – n8n nutzt .chat-window-toggle */
+    #n8n-chat .chat-window-toggle{
+      width: 56px !important;
+      height: 56px !important;
+      border-radius: 999px !important;
+      box-shadow: 0 14px 35px rgba(0,0,0,.6) !important;
+      border: 1px solid rgba(255,255,255,.20) !important;
+      background: rgba(255,255,255,.08) !important;
+      color: var(--chat-text) !important;
+      position: relative !important;
+      overflow: hidden !important;
+    }
 
-    /* Header: grau, weniger auffällig */
-    .n8n-chat-header,
-    .n8n-chat__header{
+    /* Original Icon ausblenden (SVG) */
+    #n8n-chat .chat-window-toggle svg,
+    #n8n-chat .chat-window-toggle img{
+      display:none !important;
+    }
+
+    /* Barber Emoji rein */
+    #n8n-chat .chat-window-toggle::after{
+      content:"💈";
+      font-size: 20px;
+      line-height: 1;
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+    }
+
+    /* Header dezenter */
+    #n8n-chat .chat-header{
       background: rgba(255,255,255,.06) !important;
-      border-bottom:1px solid var(--chat-border)!important;
-      color:var(--chat-text)!important;
+      border-bottom: 1px solid var(--chat-border) !important;
+      color: var(--chat-text) !important;
     }
 
-    /* falls Header-Text/Untertitel existiert */
-    .n8n-chat-header h1,
-    .n8n-chat__header h1,
-    .n8n-chat-header h2,
-    .n8n-chat__header h2,
-    .n8n-chat-header p,
-    .n8n-chat__header p{
-      color:var(--chat-text)!important;
-      font-family: inherit !important;
-    }
-
-    /* Nachrichtenbereich */
-    .n8n-chat-messages,
-    .n8n-chat__messages{
-      background:var(--chat-bg)!important;
-      color:var(--chat-text)!important;
-    }
-
-    /* Typografie allgemein (klein, sauber, weiß) */
-    .n8n-chat *{
+    /* Gesamte Typo (kleiner, sauber) */
+    #n8n-chat, #n8n-chat *{
       font-family: inherit !important;
       font-size: 13px !important;
       line-height: 1.45 !important;
     }
 
-    /* Bot Bubble */
-    .n8n-chat-message--bot,
-    .n8n-chat__message--bot{
-      background:var(--chat-bubble-bot)!important;
-      color:var(--chat-text)!important;
-      border:1px solid rgba(255,255,255,.10)!important;
-      border-radius:14px!important;
+    /* Messages Fläche */
+    #n8n-chat .chat-messages{
+      background: var(--chat-bg) !important;
+      color: var(--chat-text) !important;
     }
 
-    /* User Bubble */
-    .n8n-chat-message--user,
-    .n8n-chat__message--user{
-      background:var(--chat-bubble-user)!important;
-      color:var(--chat-text)!important;
-      border:1px solid rgba(255,255,255,.14)!important;
-      border-radius:14px!important;
+    /* Bubbles (Fallback falls Variablen nicht reichen) */
+    #n8n-chat .chat-message--bot{
+      background: var(--chat-bot) !important;
+      color: var(--chat-text) !important;
+      border: 1px solid rgba(255,255,255,.10) !important;
+      border-radius: 14px !important;
+    }
+    #n8n-chat .chat-message--user{
+      background: var(--chat-user) !important;
+      color: var(--chat-text) !important;
+      border: 1px solid rgba(255,255,255,.14) !important;
+      border-radius: 14px !important;
     }
 
-    /* Input Area */
-    .n8n-chat-input,
-    .n8n-chat__input{
-      background:rgba(255,255,255,.04)!important;
-      border-top:1px solid var(--chat-border)!important;
+    /* Input */
+    #n8n-chat .chat-input{
+      background: rgba(255,255,255,.04) !important;
+      border-top: 1px solid var(--chat-border) !important;
+    }
+    #n8n-chat .chat-input textarea,
+    #n8n-chat .chat-input input{
+      background: transparent !important;
+      color: var(--chat-text) !important;
+      border: none !important;
+      outline: none !important;
+    }
+    #n8n-chat .chat-input textarea::placeholder,
+    #n8n-chat .chat-input input::placeholder{
+      color: var(--chat-muted) !important;
     }
 
-    .n8n-chat-input textarea,
-    .n8n-chat__input textarea,
-    .n8n-chat-input input,
-    .n8n-chat__input input{
-      background:transparent!important;
-      color:var(--chat-text)!important;
-      font-family:inherit!important;
-      font-size:13px!important;
-      border:none!important;
-      outline:none!important;
-    }
-
-    .n8n-chat-input textarea::placeholder,
-    .n8n-chat__input textarea::placeholder,
-    .n8n-chat-input input::placeholder,
-    .n8n-chat__input input::placeholder{
-      color:var(--chat-muted)!important;
-    }
-
-    /* Senden: grauer/weißer Pfeil + weiße Umrandung */
-    .n8n-chat-send,
-    .n8n-chat__send{
-      background:transparent!important;
-      border:1px solid rgba(255,255,255,.22)!important;
-      color:var(--chat-accent)!important;
-      border-radius:12px!important;
-    }
-    .n8n-chat-send svg,
-    .n8n-chat__send svg{
-      fill: var(--chat-accent) !important;
+    /* Send Button (Fallback) */
+    #n8n-chat .chat-input-send-button{
+      background: transparent !important;
+      border: 1px solid rgba(255,255,255,.22) !important;
       color: var(--chat-accent) !important;
-      opacity: .9 !important;
+      border-radius: 12px !important;
     }
-
-    /* Floating Button: weiß + Barber Emoji */
-    .n8n-chat-button{
-      background: rgba(255,255,255,.08) !important;
-      border:1px solid rgba(255,255,255,.20)!important;
-      box-shadow:0 14px 35px rgba(0,0,0,.6)!important;
-      color:#fff!important;
-      position: relative !important;
-    }
-
-    /* Viele Versionen rendern ein Icon im Button – wir blenden es aus und ersetzen es */
-    .n8n-chat-button svg,
-    .n8n-chat-button img{
-      display:none!important;
-    }
-
-    .n8n-chat-button::after{
-      content:"💈";
-      font-size:18px;
-      line-height:1;
-      position:absolute;
-      inset:0;
-      display:grid;
-      place-items:center;
+    #n8n-chat .chat-input-send-button svg,
+    #n8n-chat .chat-input-send-button svg *{
+      fill: var(--chat-accent) !important;
+      stroke: var(--chat-accent) !important;
     }
   </style>
 </head>
@@ -302,4 +318,3 @@
   </script>
 </body>
 </html>
-
