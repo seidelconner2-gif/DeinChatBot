@@ -1,36 +1,153 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Conar Friseur</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root{
+      --bg: #0b0b0d;
+      --card: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --accent: #ffffff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(255,255,255,.10), transparent 55%),
+                  radial-gradient(900px 600px at 90% 30%, rgba(255,255,255,.08), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+    }
+    .hero{
+      display:flex;
+      gap: 18px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom: 22px;
+    }
+    .title{
+      margin:0;
+      font-size: clamp(30px, 4vw, 44px);
+      letter-spacing: -.02em;
+    }
+    .subtitle{
+      margin:10px 0 0;
+      color: var(--muted);
+      max-width: 60ch;
+      line-height: 1.5;
+      font-size: 16px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .card{
+      grid-column: span 6;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size: 16px;
+      letter-spacing: -.01em;
+    }
+    .list{
+      margin:0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .pillrow{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .pill{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      user-select:none;
+    }
+    .footer{
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 780px){
+      .card{grid-column: span 12;}
+      .wrap{padding-top: 36px;}
+    }
+  </style>
 </head>
 <body>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <h1 class="title">Willkommen bei Conar Friseur 💈</h1>
+        <p class="subtitle">
+          Buche, verschiebe oder storniere deinen Termin direkt im Chat.
+          Außerdem bekommst du Infos zu Öffnungszeiten, Adresse & Team.
+        </p>
+        <div class="pillrow">
+          <div class="pill">Mo–Fr · 08:00–16:00</div>
+          <div class="pill">Musterstraße 14</div>
+          <div class="pill">Jason · Elina</div>
+        </div>
+      </div>
+    </section>
 
-  <h1>Willkommen bei Conar Friseur 💈</h1>
+    <section class="grid">
+      <div class="card">
+        <h2>Was ich für dich erledigen kann</h2>
+        <ul class="list">
+          <li>Termin buchen</li>
+          <li>Termin verschieben</li>
+          <li>Termin stornieren</li>
+          <li>Infos zum Salon</li>
+        </ul>
+      </div>
 
-  <p>
-    Ich helfe dir gern bei:<br>
-    • Termin buchen / ändern / <!-- n8n Chat Widget -->
-<script type="module">
-  import Chat from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
+      <div class="card">
+        <h2>Schnell starten</h2>
+        <ul class="list">
+          <li>„Ich möchte einen Termin bei Jason am 27.12 um 12:00“</li>
+          <li>„Kann ich bei euch Termine buchen?“</li>
+          <li>„Von wann bis wann arbeitet Elina?“</li>
+        </ul>
+        <div class="footer">
+          Tipp: Unten rechts öffnet sich der Chat.
+        </div>
+      </div>
+    </section>
+  </main>
 
-  Chat.create({
-    webhookUrl: "https://conner1005.app.n8n.cloud/webhook/e76ac4f7-7502-4340-a298-a78f2d08c432/chat",
-    mode: "window",
-    chatInputPlaceholder: "Schreib uns hier …",
-    theme: {
-      button: {
-        backgroundColor: "#000000",
-        iconColor: "#ffffff"
-      }
-    }
-  });
-</script><br>
-    • Infos zu Öffnungszeiten, Adresse & Team
-  </p>
-
+  <!-- n8n Chat Widget (nur URL einsetzen) -->
+  <script type="module">
+    import Chat from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
+    Chat.create({
+      webhookUrl: "https://conner1005.app.n8n.cloud/webhook/e76ac4f7-7502-4340-a298-a78f2d08c432/chat",
+      mode: "window"
+    });
+  </script>
 </body>
-
-  
 </html>
