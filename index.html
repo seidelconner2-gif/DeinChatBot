@@ -1,183 +1,84 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Conar Friseur</title>
+<script type="module">
+  import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
 
-  <!-- n8n Pflicht-CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" />
+  createChat({
+    webhookUrl: "https://conner1005.app.n8n.cloud/webhook/e76ac4f7-7502-4340-a298-a78f2d08c432/chat",
+    mode: "window",
+    chatInputPlaceholder: "Nachricht schreiben…",
+    initialMessages: [
+      "👋 Willkommen bei Conar Friseur 💈\n\n✂️ Ich helfe dir gerne bei:\n• Termin buchen / ändern / stornieren\n• Infos zu Öffnungszeiten & Team"
+    ]
+  });
 
-  <style>
-    :root{
-      /* Website */
-      --page-bg:#0b0c10;
-      --text:#fff;
+  // CSS immer zuletzt injizieren (um n8n-CSS sicher zu schlagen)
+  const css = `
+  #n8n-chat, #n8n-chat * { font-family: inherit !important; }
 
-      /* Chat Wunschfarben */
-      --chat-bg:#14161a;         /* kompletter Chat-Hintergrund dunkelgrau */
-      --chat-border:rgba(255,255,255,.14);
-      --bubble:#2a2d33;          /* beide Bubbles hellgrau */
-      --bubble-border:rgba(255,255,255,.16);
-      --chat-text:#ffffff;
-      --muted:rgba(255,255,255,.6);
+  /* KOMPLETTES Chat-Panel dunkelgrau */
+  #n8n-chat .chat-window,
+  #n8n-chat main.chat-layout.chat-wrapper,
+  #n8n-chat .chat-layout,
+  #n8n-chat .chat-wrapper,
+  #n8n-chat .chat-body,
+  #n8n-chat .chat-messages-list,
+  #n8n-chat .chat-footer{
+    background: #14161a !important;
+    background-color: #14161a !important;
+  }
 
-      --shadow:0 30px 80px rgba(0,0,0,.75);
-      --gap:18px;
-      --chat-width:min(30vw,420px);
-      --chat-height:min(78vh,720px);
-    }
+  /* Header komplett weg */
+  #n8n-chat .chat-header{ display:none !important; }
 
-    body{
-      margin:0;
-      min-height:100vh;
-      background:var(--page-bg);
-      color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-    }
+  /* Bubbles: beide hellgrau, Text weiß */
+  #n8n-chat .chat-message,
+  #n8n-chat .chat-message--bot,
+  #n8n-chat .chat-message--user{
+    background: #2a2d33 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255,255,255,.16) !important;
+    border-radius: 14px !important;
+  }
 
-    /* ===== n8n Variablen (wo möglich) ===== */
-    #n8n-chat{
-      --chat--font-family: inherit !important;
+  /* Input (wie bei dir ok) */
+  #n8n-chat .chat-input{
+    background:#1a1c20 !important;
+    border-top:1px solid rgba(255,255,255,.14) !important;
+  }
+  #n8n-chat .chat-input textarea,
+  #n8n-chat .chat-input input{
+    background:transparent !important;
+    color:#fff !important;
+  }
+  #n8n-chat .chat-input textarea::placeholder,
+  #n8n-chat .chat-input input::placeholder{
+    color: rgba(255,255,255,.6) !important;
+  }
 
-      --chat--window--background: var(--chat-bg) !important;
-      --chat--messages--background: var(--chat-bg) !important;
+  /* Floating Button 💈 */
+  #n8n-chat .chat-window-toggle{
+    background:#1a1c20 !important;
+    border:1px solid rgba(255,255,255,.25) !important;
+    position:relative !important;
+  }
+  #n8n-chat .chat-window-toggle svg{ display:none !important; }
+  #n8n-chat .chat-window-toggle::after{
+    content:"💈";
+    position:absolute; inset:0;
+    display:grid; place-items:center;
+    font-size:20px;
+  }
+  `;
 
-      --chat--text-color: var(--chat-text) !important;
-      --chat--muted-color: var(--muted) !important;
+  const style = document.createElement("style");
+  style.id = "n8n-overrides";
+  style.textContent = css;
+  document.head.appendChild(style);
 
-      --chat--border-color: var(--chat-border) !important;
-
-      --chat--message--user--background: var(--bubble) !important;
-      --chat--message--user--color: var(--chat-text) !important;
-
-      --chat--message--bot--background: var(--bubble) !important;
-      --chat--message--bot--color: var(--chat-text) !important;
-
-      --chat--input--background: #1a1c20 !important;
-      --chat--input--text-color: var(--chat-text) !important;
-      --chat--input--placeholder-color: var(--muted) !important;
-
-      --chat--toggle--background: #1a1c20 !important;
-      --chat--toggle--color: #ffffff !important;
-
-      --chat--button-right: var(--gap) !important;
-      --chat--button-bottom: var(--gap) !important;
-    }
-
-    /* ===== harte Fallbacks (damit NICHTS mehr weiß bleibt) ===== */
-    #n8n-chat .chat-window,
-    #n8n-chat .chat-window *:not(.chat-message):not(.chat-message *):not(input):not(textarea){
-      /* verhindert weiße Panels im Fenster (außer Bubbles/Input) */
-      background-color: transparent;
-    }
-
-    #n8n-chat .chat-window{
-      width:var(--chat-width)!important;
-      height:var(--chat-height)!important;
-      border-radius:18px!important;
-      box-shadow:var(--shadow)!important;
-      border:1px solid var(--chat-border)!important;
-      background:var(--chat-bg)!important;
-      overflow:hidden!important;
-    }
-
-    /* Chat-Innenflächen (je nach n8n-Version unterschiedlich benannt) */
-    #n8n-chat .chat-messages,
-    #n8n-chat .chat-body,
-    #n8n-chat .chat-content,
-    #n8n-chat .chat-messages-list,
-    #n8n-chat .chat-messages-container{
-      background:var(--chat-bg)!important;
-      color:var(--chat-text)!important;
-    }
-
-    /* Header komplett aus */
-    #n8n-chat .chat-header{ display:none!important; }
-
-    /* Bubbles: beide gleich hellgrau + weiße Schrift */
-    #n8n-chat .chat-message--bot,
-    #n8n-chat .chat-message--user,
-    #n8n-chat .chat-message{
-      background:var(--bubble)!important;
-      color:var(--chat-text)!important;
-      border:1px solid var(--bubble-border)!important;
-      border-radius:14px!important;
-      font-size:13px!important;
-      line-height:1.45!important;
-    }
-
-    /* Input (dein Feld war „richtig“, bleibt dunkel) */
-    #n8n-chat .chat-input{
-      background:#1a1c20!important;
-      border-top:1px solid var(--chat-border)!important;
-    }
-    #n8n-chat .chat-input textarea,
-    #n8n-chat .chat-input input{
-      background:transparent!important;
-      color:#fff!important;
-      border:none!important;
-      outline:none!important;
-    }
-    #n8n-chat .chat-input textarea::placeholder,
-    #n8n-chat .chat-input input::placeholder{
-      color:var(--muted)!important;
-    }
-
-    /* Send Button */
-    #n8n-chat .chat-input-send-button{
-      background:transparent!important;
-      border:1px solid rgba(255,255,255,.25)!important;
-      border-radius:10px!important;
-    }
-    #n8n-chat .chat-input-send-button svg{ fill:#fff!important; }
-
-    /* Floating Button mit 💈 */
-    #n8n-chat .chat-window-toggle{
-      width:56px!important;
-      height:56px!important;
-      border-radius:999px!important;
-      background:#1a1c20!important;
-      border:1px solid rgba(255,255,255,.25)!important;
-      box-shadow:var(--shadow)!important;
-      position:relative!important;
-    }
-    #n8n-chat .chat-window-toggle svg{ display:none!important; }
-    #n8n-chat .chat-window-toggle::after{
-      content:"💈";
-      font-size:20px;
-      position:absolute;
-      inset:0;
-      display:grid;
-      place-items:center;
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- n8n Embedded Chat -->
-  <script type="module">
-    import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
-
-    createChat({
-      webhookUrl: "https://conner1005.app.n8n.cloud/webhook/e76ac4f7-7502-4340-a298-a78f2d08c432/chat",
-      mode: "window",
-      chatInputPlaceholder: "Nachricht schreiben…",
-      initialMessages: [
-        "👋 Willkommen bei Conar Friseur 💈\n\n✂️ Ich helfe dir gerne bei:\n• Termin buchen / ändern / stornieren\n• Infos zu Öffnungszeiten & Team"
-      ]
-    });
-
-    // Fallback: falls Placeholder-Option in deiner Version ignoriert wird
-    const setPlaceholder = () => {
-      const el = document.querySelector('#n8n-chat textarea, #n8n-chat input[type="text"]');
-      if (el) el.setAttribute('placeholder', 'Nachricht schreiben…');
-    };
-    setTimeout(setPlaceholder, 200);
-    setTimeout(setPlaceholder, 800);
-    setTimeout(setPlaceholder, 1500);
-  </script>
-
-</body>
-</html>
+  // Placeholder sicher auf Deutsch setzen (falls Option ignoriert wird)
+  const setPH = () => {
+    const el = document.querySelector('#n8n-chat textarea, #n8n-chat input[type="text"]');
+    if (el) el.setAttribute("placeholder", "Nachricht schreiben…");
+  };
+  new MutationObserver(setPH).observe(document.documentElement, { childList:true, subtree:true });
+  setPH();
+</script>
