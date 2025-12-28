@@ -5,22 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Conar Friseur</title>
 
-  <!-- PFLICHT: Widget-CSS -->
+  <!-- n8n Chat CSS (PFLICHT) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" />
 
   <style>
     :root{
       --bg:#0b0c10;
-      --card:rgba(255,255,255,.06);
+      --card:#15171c;
       --border:rgba(255,255,255,.12);
       --text:rgba(255,255,255,.92);
       --muted:rgba(255,255,255,.65);
+      --accent:#5eead4;
 
-      --chat-gap:18px;               /* Randabstand zum Seitenrand */
-      --chat-width:min(30vw,420px);  /* ~30% */
+      --chat-gap:18px;
+      --chat-width:min(30vw,420px);
       --chat-height:min(78vh,720px);
     }
+
     *{box-sizing:border-box}
+
     body{
       margin:0;
       min-height:100vh;
@@ -31,13 +34,16 @@
         var(--bg);
       color:var(--text);
     }
+
     header{
-      position:sticky; top:0;
+      position:sticky;
+      top:0;
       backdrop-filter: blur(10px);
-      background: rgba(11,12,16,.7);
+      background: rgba(11,12,16,.75);
       border-bottom:1px solid var(--border);
-      z-index: 5;
+      z-index:10;
     }
+
     .bar{
       max-width:1100px;
       margin:0 auto;
@@ -47,6 +53,7 @@
       align-items:center;
       gap:12px;
     }
+
     .chips{display:flex; gap:10px; flex-wrap:wrap}
     .chip{
       padding:8px 12px;
@@ -55,38 +62,48 @@
       background:rgba(255,255,255,.04);
       font-size:13px;
     }
+
     main{
       max-width:1100px;
       margin:0 auto;
-      padding:42px 18px 80px;
+      padding:48px 18px 100px;
     }
+
     .grid{
       display:grid;
       grid-template-columns:1.2fr .8fr;
-      gap:16px;
+      gap:18px;
     }
+
     .card{
-      background:var(--card);
+      background:linear-gradient(180deg,#171a20,#12141a);
       border:1px solid var(--border);
-      border-radius:18px;
-      padding:22px;
+      border-radius:20px;
+      padding:26px;
     }
+
     h1{
-      margin:0 0 10px;
-      font-size:clamp(28px,4vw,44px);
+      margin:0 0 12px;
+      font-size:clamp(30px,4vw,46px);
       letter-spacing:-.02em;
     }
+
     p{color:var(--muted); line-height:1.6}
     ul{margin:0; padding-left:18px; color:var(--muted); line-height:1.6}
-    @media(max-width:900px){ .grid{grid-template-columns:1fr} }
 
-    /* ===== Chat: Button-Position + Fenster rechts mit Abstand ===== */
+    @media(max-width:900px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    /* ===============================
+       n8n CHAT – POSITION & GRÖSSE
+       =============================== */
+
     .n8n-chat{
       --chat-button-right: var(--chat-gap);
       --chat-button-bottom: var(--chat-gap);
     }
 
-    /* defensiv: unterschiedliche Klassen je nach Version */
     .n8n-chat-window,
     .n8n-chat__window,
     .n8n-chat-window-container,
@@ -94,16 +111,81 @@
       right:var(--chat-gap)!important;
       bottom:var(--chat-gap)!important;
       left:auto!important;
-
       width:var(--chat-width)!important;
       height:var(--chat-height)!important;
-
-      max-width:calc(100vw - (var(--chat-gap) * 2))!important;
-      max-height:calc(100vh - (var(--chat-gap) * 2))!important;
-
-      border-radius:16px!important;
-      box-shadow:0 24px 70px rgba(0,0,0,.55)!important;
+      max-width:calc(100vw - 36px)!important;
+      max-height:calc(100vh - 36px)!important;
+      border-radius:18px!important;
       overflow:hidden!important;
+      box-shadow:0 28px 80px rgba(0,0,0,.6)!important;
+      border:1px solid var(--border)!important;
+    }
+
+    /* ===============================
+       n8n CHAT – THEME / DESIGN
+       =============================== */
+
+    .n8n-chat-window,
+    .n8n-chat__window{
+      background:#121318!important;
+      color:var(--text)!important;
+      font-family:inherit!important;
+    }
+
+    .n8n-chat-header,
+    .n8n-chat__header{
+      background:linear-gradient(135deg,#0f172a,#020617)!important;
+      border-bottom:1px solid var(--border)!important;
+      color:var(--text)!important;
+    }
+
+    .n8n-chat-messages,
+    .n8n-chat__messages{
+      background:#0b0c10!important;
+    }
+
+    .n8n-chat-message--bot,
+    .n8n-chat__message--bot{
+      background:rgba(255,255,255,.07)!important;
+      color:var(--text)!important;
+      border-radius:14px!important;
+    }
+
+    .n8n-chat-message--user,
+    .n8n-chat__message--user{
+      background:var(--accent)!important;
+      color:#042f2e!important;
+      border-radius:14px!important;
+    }
+
+    .n8n-chat-input,
+    .n8n-chat__input{
+      background:#0f1117!important;
+      border-top:1px solid var(--border)!important;
+    }
+
+    .n8n-chat-input textarea,
+    .n8n-chat__input textarea{
+      background:transparent!important;
+      color:var(--text)!important;
+      font-family:inherit!important;
+    }
+
+    .n8n-chat-input textarea::placeholder{
+      color:var(--muted)!important;
+    }
+
+    .n8n-chat-send,
+    .n8n-chat__send{
+      background:var(--accent)!important;
+      color:#042f2e!important;
+      border-radius:10px!important;
+    }
+
+    .n8n-chat-button{
+      background:linear-gradient(135deg,#0f172a,#020617)!important;
+      border:1px solid var(--border)!important;
+      box-shadow:0 14px 35px rgba(0,0,0,.6)!important;
     }
   </style>
 </head>
@@ -124,8 +206,12 @@
     <section class="grid">
       <div class="card">
         <h1>Haare, die sitzen. Service, der passt.</h1>
-        <p>Professionelle Schnitte und Stylings in ruhiger Atmosphäre.</p>
+        <p>
+          Professionelle Schnitte und Stylings in ruhiger Atmosphäre.
+          Termine kannst du bequem online oder telefonisch anfragen.
+        </p>
       </div>
+
       <div class="card">
         <strong>Auf einen Blick</strong>
         <ul>
@@ -138,20 +224,24 @@
     </section>
   </main>
 
-  <!-- n8n Embedded Chat (RICHTIG: createChat) -->
+  <!-- ===============================
+       n8n EMBEDDED CHAT (FINAL)
+       =============================== -->
   <script type="module">
     import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
 
     createChat({
       webhookUrl: "https://conner1005.app.n8n.cloud/webhook/e76ac4f7-7502-4340-a298-a78f2d08c432/chat",
       mode: "window",
+      chatInputPlaceholder: "Schreib hier…",
       initialMessages: [
-        "Willkommen bei Conar Friseur 💈",
+        "👋 Willkommen bei Conar Friseur 💈",
         "Ich helfe dir gern bei:",
-        "• Termin buchen / ändern / stornieren",
-        "• Infos zu Öffnungszeiten, Adresse & Team"
-      ],
-      chatInputPlaceholder: "Schreib hier…"
+        "• Termin buchen, ändern oder stornieren",
+        "• Infos zu Öffnungszeiten, Adresse & Team",
+        "",
+        "Schreib einfach los 🙂"
+      ]
     });
   </script>
 </body>
