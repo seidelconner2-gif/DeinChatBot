@@ -11,9 +11,26 @@
 
   <p>
     Ich helfe dir gern bei:<br>
-    • Termin buchen / ändern / stornieren<br>
+    • Termin buchen / ändern / <!-- n8n Chat Widget -->
+<script type="module">
+  import Chat from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
+
+  Chat.create({
+    webhookUrl: "https://conner1005.app.n8n.cloud/webhook/e76ac4f7-7502-4340-a298-a78f2d08c432/chat",
+    mode: "window",
+    chatInputPlaceholder: "Schreib uns hier …",
+    theme: {
+      button: {
+        backgroundColor: "#000000",
+        iconColor: "#ffffff"
+      }
+    }
+  });
+</script><br>
     • Infos zu Öffnungszeiten, Adresse & Team
   </p>
 
 </body>
+
+  
 </html>
