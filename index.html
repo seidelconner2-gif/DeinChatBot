@@ -4,146 +4,320 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Conar Friseur</title>
+
+  <!-- n8n chat styles (wichtig, sonst ist das Icon unsichtbar) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" />
+
   <style>
     :root{
-      --bg: #0b0b0d;
+      --bg: #0b0c10;
       --card: rgba(255,255,255,.06);
       --border: rgba(255,255,255,.12);
       --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.72);
-      --accent: #ffffff;
+      --muted: rgba(255,255,255,.68);
+      --shadow: 0 18px 55px rgba(0,0,0,.45);
+      --radius: 18px;
     }
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box; }
     body{
       margin:0;
+      min-height:100vh;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background: radial-gradient(1200px 700px at 20% 10%, rgba(255,255,255,.10), transparent 55%),
-                  radial-gradient(900px 600px at 90% 30%, rgba(255,255,255,.08), transparent 55%),
-                  var(--bg);
+      background:
+        radial-gradient(1200px 700px at 15% 12%, rgba(255,255,255,.10), transparent 55%),
+        radial-gradient(900px 600px at 88% 26%, rgba(255,255,255,.08), transparent 55%),
+        var(--bg);
       color: var(--text);
-      min-height: 100vh;
     }
-    .wrap{
-      max-width: 980px;
+
+    /* Header */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(11,12,16,.65);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .topbar-inner{
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 56px 20px 80px;
-    }
-    .hero{
+      padding: 14px 18px;
       display:flex;
-      gap: 18px;
-      align-items:flex-start;
+      align-items:center;
       justify-content:space-between;
-      flex-wrap:wrap;
-      margin-bottom: 22px;
+      gap: 12px;
     }
-    .title{
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .logo{
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.14);
+      display:grid;
+      place-items:center;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      flex: 0 0 auto;
+    }
+    .brand h1{
+      font-size: 15px;
+      margin: 0;
+      letter-spacing: .01em;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .chip{
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-size: 13px;
+      user-select:none;
+    }
+
+    /* Layout */
+    .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 42px 18px 80px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 10px;
+    }
+    .hero-card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+    .headline{
       margin:0;
-      font-size: clamp(30px, 4vw, 44px);
+      font-size: clamp(28px, 4vw, 44px);
       letter-spacing: -.02em;
+      line-height: 1.05;
     }
-    .subtitle{
-      margin:10px 0 0;
+    .sub{
+      margin: 10px 0 0;
       color: var(--muted);
+      line-height: 1.55;
       max-width: 60ch;
-      line-height: 1.5;
-      font-size: 16px;
+      font-size: 15px;
     }
-    .grid{
+    .cta-row{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      text-decoration:none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform .06s ease, background .12s ease;
+      user-select:none;
+    }
+    .btn:hover{ background: rgba(255,255,255,.11); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.secondary{
+      background: rgba(255,255,255,.04);
+    }
+
+    .info-grid{
       display:grid;
       grid-template-columns: repeat(12, 1fr);
       gap: 14px;
-      margin-top: 22px;
+      margin-top: 16px;
     }
     .card{
       grid-column: span 6;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 18px;
+      border-radius: var(--radius);
       padding: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      box-shadow: var(--shadow);
     }
-    .card h2{
-      margin:0 0 10px;
-      font-size: 16px;
+    .card h3{
+      margin: 0 0 10px;
+      font-size: 15px;
       letter-spacing: -.01em;
     }
     .list{
-      margin:0;
+      margin: 0;
       padding-left: 18px;
       color: var(--muted);
-      line-height: 1.6;
+      line-height: 1.65;
+      font-size: 14px;
     }
-    .pillrow{
-      display:flex;
-      flex-wrap:wrap;
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr;
       gap: 10px;
-      margin-top: 14px;
-    }
-    .pill{
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      user-select:none;
-    }
-    .footer{
-      margin-top: 16px;
       color: var(--muted);
-      font-size: 13px;
+      font-size: 14px;
     }
-    @media (max-width: 780px){
-      .card{grid-column: span 12;}
-      .wrap{padding-top: 36px;}
+    .kv strong{ color: var(--text); font-weight: 600; }
+    .divider{
+      height: 1px;
+      background: rgba(255,255,255,.10);
+      margin: 10px 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 920px){
+      .hero{ grid-template-columns: 1fr; }
+      .card{ grid-column: span 12; }
+    }
+
+    /* =========================================
+       Chat: rechts, ~30% Breite, mit Randabstand
+       ========================================= */
+    /* Wir zwingen das n8n Fenster als "Panel" rechts. */
+    :root{
+      --chat-gap: 18px;                 /* Abstand zum Rand (sichtbarer Rand) */
+      --chat-width: min(30vw, 420px);   /* ~30% der Website, capped */
+      --chat-height: min(78vh, 720px);  /* Fensterhöhe */
+    }
+
+    /* n8n chat root (Button) etwas nach oben setzen */
+    .n8n-chat{
+      --chat-button-right: var(--chat-gap);
+      --chat-button-bottom: var(--chat-gap);
+    }
+
+    /* Einige Versionen nutzen diese Klassen/Container – wir überschreiben defensiv */
+    .n8n-chat-window,
+    .n8n-chat__window,
+    .n8n-chat-window-container,
+    .n8n-chat__window-container{
+      right: var(--chat-gap) !important;
+      bottom: var(--chat-gap) !important;
+      left: auto !important;
+      width: var(--chat-width) !important;
+      max-width: calc(100vw - (var(--chat-gap) * 2)) !important;
+      height: var(--chat-height) !important;
+      max-height: calc(100vh - (var(--chat-gap) * 2)) !important;
+      border-radius: 16px !important;
+      overflow: hidden !important;
+      box-shadow: 0 24px 70px rgba(0,0,0,.55) !important;
+    }
+
+    /* Wenn das Widget eine "full width" Regel hat, verhindern */
+    .n8n-chat-window iframe,
+    .n8n-chat__window iframe{
+      width: 100% !important;
+      height: 100% !important;
+      border: 0 !important;
     }
   </style>
 </head>
+
 <body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo">💈</div>
+        <h1>Conar Friseur</h1>
+      </div>
+      <nav class="nav">
+        <div class="chip">Mo–Fr · 08:00–16:00</div>
+        <div class="chip">Musterstraße 14</div>
+        <div class="chip">Tel: 01211234567</div>
+      </nav>
+    </div>
+  </header>
+
   <main class="wrap">
     <section class="hero">
-      <div>
-        <h1 class="title">Willkommen bei Conar Friseur 💈</h1>
-        <p class="subtitle">
-          Buche, verschiebe oder storniere deinen Termin direkt im Chat.
-          Außerdem bekommst du Infos zu Öffnungszeiten, Adresse & Team.
+      <div class="hero-card">
+        <h2 class="headline">Haare, die sitzen. Service, der passt.</h2>
+        <p class="sub">
+          Bei Conar Friseur bekommst du schnelle, saubere Schnitte und professionelle Stylings.
+          Termine kannst du direkt unten rechts im Chat anfragen – oder ganz klassisch per Telefon.
         </p>
-        <div class="pillrow">
-          <div class="pill">Mo–Fr · 08:00–16:00</div>
-          <div class="pill">Musterstraße 14</div>
-          <div class="pill">Jason · Elina</div>
+
+        <div class="cta-row">
+          <button class="btn" type="button" onclick="window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })">
+            Öffnungszeiten ansehen
+          </button>
+          <a class="btn secondary" href="tel:01211234567">Jetzt anrufen</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <h3 style="margin:0 0 10px; font-size:15px;">Auf einen Blick</h3>
+        <div class="kv">
+          <div><strong>Team:</strong> Jason, Elina</div>
+          <div><strong>Adresse:</strong> Musterstraße 14</div>
+          <div><strong>Öffnungszeiten:</strong> Mo–Fr 08:00–16:00</div>
+          <div class="divider"></div>
+          <div>
+            <strong>Tipp:</strong> Unten rechts findest du den Chat – dort kannst du Termine
+            buchen, verschieben oder stornieren.
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="grid">
+    <section class="info-grid" aria-label="Leistungen und Infos">
       <div class="card">
-        <h2>Was ich für dich erledigen kann</h2>
+        <h3>Leistungen</h3>
         <ul class="list">
-          <li>Termin buchen</li>
-          <li>Termin verschieben</li>
-          <li>Termin stornieren</li>
-          <li>Infos zum Salon</li>
+          <li>Haarschnitt (Damen / Herren)</li>
+          <li>Waschen & Föhnen</li>
+          <li>Färben / Strähnen</li>
+          <li>Dauerwelle</li>
         </ul>
       </div>
 
       <div class="card">
-        <h2>Schnell starten</h2>
+        <h3>So findest du uns</h3>
         <ul class="list">
-          <li>„Ich möchte einen Termin bei Jason am 27.12 um 12:00“</li>
-          <li>„Kann ich bei euch Termine buchen?“</li>
-          <li>„Von wann bis wann arbeitet Elina?“</li>
+          <li>Musterstraße 14</li>
+          <li>Bad Driburg</li>
+          <li>Kontakt: Musteremail@muster.de</li>
         </ul>
-        <div class="footer">
-          Tipp: Unten rechts öffnet sich der Chat.
-        </div>
       </div>
+    </section>
+
+    <section style="margin-top:16px; color: rgba(255,255,255,.62); font-size:13px;">
+      Hinweis: Für Terminverwaltung werden nur notwendige Daten verarbeitet (Name, Terminzeit, ggf. Kontakt).
     </section>
   </main>
 
-  <!-- n8n Chat Widget (nur URL einsetzen) -->
+  <!-- n8n Chat Widget -->
   <script type="module">
     import Chat from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
+
     Chat.create({
       webhookUrl: "https://conner1005.app.n8n.cloud/webhook/e76ac4f7-7502-4340-a298-a78f2d08c432/chat",
       mode: "window"
