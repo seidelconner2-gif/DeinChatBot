@@ -78,6 +78,12 @@
     const css = `
     #n8n-chat, #n8n-chat *{ font-family: inherit !important; }
 
+    /* Zeilenumbrüche in Messages wirklich anzeigen (DAS war der fehlende Punkt) */
+    #n8n-chat .chat-message,
+    #n8n-chat .chat-message *{
+      white-space: pre-line !important;
+    }
+
     /* Wrapper Position */
     #n8n-chat .chat-window-wrapper{
       position: fixed !important;
