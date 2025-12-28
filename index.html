@@ -5,19 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Conar Friseur</title>
 
+  <!-- n8n Pflicht-CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" />
 
   <style>
     :root{
+      /* Website */
       --page-bg:#0b0c10;
+      --text:#fff;
 
-      --chat-bg:#14161a;
+      /* Chat Wunschfarben */
+      --chat-bg:#14161a;         /* kompletter Chat-Hintergrund dunkelgrau */
       --chat-border:rgba(255,255,255,.14);
+      --bubble:#2a2d33;          /* beide Bubbles hellgrau */
+      --bubble-border:rgba(255,255,255,.16);
       --chat-text:#ffffff;
-      --chat-muted:rgba(255,255,255,.6);
-
-      --bubble-user:#2a2d33;
-      --bubble-bot:#24272d;
+      --muted:rgba(255,255,255,.6);
 
       --shadow:0 30px 80px rgba(0,0,0,.75);
       --gap:18px;
@@ -29,33 +32,31 @@
       margin:0;
       min-height:100vh;
       background:var(--page-bg);
-      color:#fff;
+      color:var(--text);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
     }
 
-    /* ===============================
-       n8n CHAT – VARIABLEN (WICHTIG)
-       =============================== */
+    /* ===== n8n Variablen (wo möglich) ===== */
     #n8n-chat{
       --chat--font-family: inherit !important;
 
       --chat--window--background: var(--chat-bg) !important;
-      --chat--border-color: var(--chat-border) !important;
-
-      --chat--text-color: var(--chat-text) !important;
-      --chat--muted-color: var(--chat-muted) !important;
-
       --chat--messages--background: var(--chat-bg) !important;
 
-      --chat--message--user--background: var(--bubble-user) !important;
+      --chat--text-color: var(--chat-text) !important;
+      --chat--muted-color: var(--muted) !important;
+
+      --chat--border-color: var(--chat-border) !important;
+
+      --chat--message--user--background: var(--bubble) !important;
       --chat--message--user--color: var(--chat-text) !important;
 
-      --chat--message--bot--background: var(--bubble-bot) !important;
+      --chat--message--bot--background: var(--bubble) !important;
       --chat--message--bot--color: var(--chat-text) !important;
 
       --chat--input--background: #1a1c20 !important;
       --chat--input--text-color: var(--chat-text) !important;
-      --chat--input--placeholder-color: var(--chat-muted) !important;
+      --chat--input--placeholder-color: var(--muted) !important;
 
       --chat--toggle--background: #1a1c20 !important;
       --chat--toggle--color: #ffffff !important;
@@ -64,7 +65,13 @@
       --chat--button-bottom: var(--gap) !important;
     }
 
-    /* Fenster */
+    /* ===== harte Fallbacks (damit NICHTS mehr weiß bleibt) ===== */
+    #n8n-chat .chat-window,
+    #n8n-chat .chat-window *:not(.chat-message):not(.chat-message *):not(input):not(textarea){
+      /* verhindert weiße Panels im Fenster (außer Bubbles/Input) */
+      background-color: transparent;
+    }
+
     #n8n-chat .chat-window{
       width:var(--chat-width)!important;
       height:var(--chat-height)!important;
@@ -75,35 +82,46 @@
       overflow:hidden!important;
     }
 
-    /* HEADER KOMPLETT AUS */
-    #n8n-chat .chat-header{
-      display:none!important;
-    }
-
-    /* Messages */
-    #n8n-chat .chat-messages{
+    /* Chat-Innenflächen (je nach n8n-Version unterschiedlich benannt) */
+    #n8n-chat .chat-messages,
+    #n8n-chat .chat-body,
+    #n8n-chat .chat-content,
+    #n8n-chat .chat-messages-list,
+    #n8n-chat .chat-messages-container{
       background:var(--chat-bg)!important;
+      color:var(--chat-text)!important;
     }
 
-    /* Bubbles */
+    /* Header komplett aus */
+    #n8n-chat .chat-header{ display:none!important; }
+
+    /* Bubbles: beide gleich hellgrau + weiße Schrift */
+    #n8n-chat .chat-message--bot,
+    #n8n-chat .chat-message--user,
     #n8n-chat .chat-message{
+      background:var(--bubble)!important;
+      color:var(--chat-text)!important;
+      border:1px solid var(--bubble-border)!important;
       border-radius:14px!important;
       font-size:13px!important;
       line-height:1.45!important;
     }
 
-    /* Input */
+    /* Input (dein Feld war „richtig“, bleibt dunkel) */
     #n8n-chat .chat-input{
       background:#1a1c20!important;
       border-top:1px solid var(--chat-border)!important;
     }
-
     #n8n-chat .chat-input textarea,
     #n8n-chat .chat-input input{
       background:transparent!important;
       color:#fff!important;
       border:none!important;
       outline:none!important;
+    }
+    #n8n-chat .chat-input textarea::placeholder,
+    #n8n-chat .chat-input input::placeholder{
+      color:var(--muted)!important;
     }
 
     /* Send Button */
@@ -112,12 +130,9 @@
       border:1px solid rgba(255,255,255,.25)!important;
       border-radius:10px!important;
     }
+    #n8n-chat .chat-input-send-button svg{ fill:#fff!important; }
 
-    #n8n-chat .chat-input-send-button svg{
-      fill:#fff!important;
-    }
-
-    /* Floating Button */
+    /* Floating Button mit 💈 */
     #n8n-chat .chat-window-toggle{
       width:56px!important;
       height:56px!important;
@@ -127,11 +142,7 @@
       box-shadow:var(--shadow)!important;
       position:relative!important;
     }
-
-    #n8n-chat .chat-window-toggle svg{
-      display:none!important;
-    }
-
+    #n8n-chat .chat-window-toggle svg{ display:none!important; }
     #n8n-chat .chat-window-toggle::after{
       content:"💈";
       font-size:20px;
@@ -154,12 +165,18 @@
       mode: "window",
       chatInputPlaceholder: "Nachricht schreiben…",
       initialMessages: [
-        "👋 Willkommen bei Conar Friseur 💈",
-        "✂️ Ich helfe dir gerne bei:",
-        "• Termin buchen / ändern / stornieren",
-        "• Infos zu Öffnungszeiten & Team"
+        "👋 Willkommen bei Conar Friseur 💈\n\n✂️ Ich helfe dir gerne bei:\n• Termin buchen / ändern / stornieren\n• Infos zu Öffnungszeiten & Team"
       ]
     });
+
+    // Fallback: falls Placeholder-Option in deiner Version ignoriert wird
+    const setPlaceholder = () => {
+      const el = document.querySelector('#n8n-chat textarea, #n8n-chat input[type="text"]');
+      if (el) el.setAttribute('placeholder', 'Nachricht schreiben…');
+    };
+    setTimeout(setPlaceholder, 200);
+    setTimeout(setPlaceholder, 800);
+    setTimeout(setPlaceholder, 1500);
   </script>
 
 </body>
