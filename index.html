@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Conar Friseur</title>
 
-  <!-- n8n Chat CSS -->
+  <!-- PFLICHT: Widget-CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" />
 
   <style>
@@ -15,6 +15,10 @@
       --border:rgba(255,255,255,.12);
       --text:rgba(255,255,255,.92);
       --muted:rgba(255,255,255,.65);
+
+      --chat-gap:18px;               /* Randabstand zum Seitenrand */
+      --chat-width:min(30vw,420px);  /* ~30% */
+      --chat-height:min(78vh,720px);
     }
     *{box-sizing:border-box}
     body{
@@ -27,12 +31,12 @@
         var(--bg);
       color:var(--text);
     }
-
     header{
       position:sticky; top:0;
       backdrop-filter: blur(10px);
       background: rgba(11,12,16,.7);
       border-bottom:1px solid var(--border);
+      z-index: 5;
     }
     .bar{
       max-width:1100px;
@@ -51,7 +55,6 @@
       background:rgba(255,255,255,.04);
       font-size:13px;
     }
-
     main{
       max-width:1100px;
       margin:0 auto;
@@ -74,24 +77,16 @@
       letter-spacing:-.02em;
     }
     p{color:var(--muted); line-height:1.6}
-    ul{margin:0; padding-left:18px; color:var(--muted)}
+    ul{margin:0; padding-left:18px; color:var(--muted); line-height:1.6}
+    @media(max-width:900px){ .grid{grid-template-columns:1fr} }
 
-    @media(max-width:900px){
-      .grid{grid-template-columns:1fr}
-    }
-
-    /* ===== Chat Position & Größe ===== */
-    :root{
-      --chat-gap:18px;
-      --chat-width:min(30vw,420px);
-      --chat-height:min(78vh,720px);
-    }
-
+    /* ===== Chat: Button-Position + Fenster rechts mit Abstand ===== */
     .n8n-chat{
       --chat-button-right: var(--chat-gap);
       --chat-button-bottom: var(--chat-gap);
     }
 
+    /* defensiv: unterschiedliche Klassen je nach Version */
     .n8n-chat-window,
     .n8n-chat__window,
     .n8n-chat-window-container,
@@ -99,10 +94,13 @@
       right:var(--chat-gap)!important;
       bottom:var(--chat-gap)!important;
       left:auto!important;
+
       width:var(--chat-width)!important;
       height:var(--chat-height)!important;
-      max-width:calc(100vw - 36px)!important;
-      max-height:calc(100vh - 36px)!important;
+
+      max-width:calc(100vw - (var(--chat-gap) * 2))!important;
+      max-height:calc(100vh - (var(--chat-gap) * 2))!important;
+
       border-radius:16px!important;
       box-shadow:0 24px 70px rgba(0,0,0,.55)!important;
       overflow:hidden!important;
@@ -126,39 +124,34 @@
     <section class="grid">
       <div class="card">
         <h1>Haare, die sitzen. Service, der passt.</h1>
-        <p>
-          Professionelle Schnitte und Stylings.
-          Termine kannst du bequem online oder telefonisch anfragen.
-        </p>
+        <p>Professionelle Schnitte und Stylings in ruhiger Atmosphäre.</p>
       </div>
-
       <div class="card">
         <strong>Auf einen Blick</strong>
         <ul>
           <li>Team: Jason, Elina</li>
           <li>Adresse: Musterstraße 14</li>
           <li>Öffnungszeiten: Mo–Fr 08:00–16:00</li>
+          <li>Kontakt: Musteremail@muster.de</li>
         </ul>
       </div>
     </section>
   </main>
 
-  <!-- n8n Embedded Chat -->
+  <!-- n8n Embedded Chat (RICHTIG: createChat) -->
   <script type="module">
-    import Chat from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
+    import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
 
-    Chat.create({
+    createChat({
       webhookUrl: "https://conner1005.app.n8n.cloud/webhook/e76ac4f7-7502-4340-a298-a78f2d08c432/chat",
       mode: "window",
-
       initialMessages: [
-        "👋 Willkommen bei Conar Friseur 💈",
+        "Willkommen bei Conar Friseur 💈",
         "Ich helfe dir gern bei:",
-        "• Termin buchen, ändern oder stornieren",
-        "• Infos zu Öffnungszeiten, Adresse & Team",
-        "",
-        "Schreib einfach los 🙂"
-      ]
+        "• Termin buchen / ändern / stornieren",
+        "• Infos zu Öffnungszeiten, Adresse & Team"
+      ],
+      chatInputPlaceholder: "Schreib hier…"
     });
   </script>
 </body>
