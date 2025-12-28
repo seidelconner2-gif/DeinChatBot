@@ -5,300 +5,145 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Conar Friseur</title>
 
-  <!-- n8n Chat CSS (Pflicht) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" />
 
   <style>
     :root{
-      --bg:#0b0c10;
-      --card:#12141a;
-      --border:rgba(255,255,255,.12);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.65);
-      --shadow:0 28px 80px rgba(0,0,0,.62);
+      --page-bg:#0b0c10;
 
-      /* Layout */
-      --chat-gap:18px;
+      --chat-bg:#14161a;
+      --chat-border:rgba(255,255,255,.14);
+      --chat-text:#ffffff;
+      --chat-muted:rgba(255,255,255,.6);
+
+      --bubble-user:#2a2d33;
+      --bubble-bot:#24272d;
+
+      --shadow:0 30px 80px rgba(0,0,0,.75);
+      --gap:18px;
       --chat-width:min(30vw,420px);
       --chat-height:min(78vh,720px);
-
-      /* Chat Theme */
-      --chat-bg:#0f1117;
-      --chat-panel:#141722;
-      --chat-border:rgba(255,255,255,.12);
-      --chat-text:rgba(255,255,255,.92);
-      --chat-muted:rgba(255,255,255,.62);
-      --chat-bot:rgba(255,255,255,.07);
-      --chat-user:rgba(255,255,255,.10);
-      --chat-accent:#ffffff;
     }
 
-    *{box-sizing:border-box}
     body{
       margin:0;
       min-height:100vh;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background:
-        radial-gradient(900px 600px at 20% 10%, rgba(255,255,255,.08), transparent 55%),
-        radial-gradient(700px 500px at 85% 25%, rgba(255,255,255,.06), transparent 55%),
-        var(--bg);
-      color:var(--text);
+      background:var(--page-bg);
+      color:#fff;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
     }
 
-    header{
-      position:sticky; top:0;
-      backdrop-filter: blur(10px);
-      background: rgba(11,12,16,.78);
-      border-bottom:1px solid var(--border);
-      z-index:10;
-    }
-    .bar{
-      max-width:1100px;
-      margin:0 auto;
-      padding:14px 18px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-    }
-    .chips{display:flex; gap:10px; flex-wrap:wrap}
-    .chip{
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.04);
-      font-size:13px;
-    }
-
-    main{
-      max-width:1100px;
-      margin:0 auto;
-      padding:48px 18px 100px;
-    }
-    .grid{
-      display:grid;
-      grid-template-columns:1.2fr .8fr;
-      gap:18px;
-    }
-    .card{
-      background:linear-gradient(180deg,#171a20,#12141a);
-      border:1px solid var(--border);
-      border-radius:20px;
-      padding:26px;
-      box-shadow:0 18px 55px rgba(0,0,0,.30);
-    }
-    h1{
-      margin:0 0 12px;
-      font-size:clamp(30px,4vw,46px);
-      letter-spacing:-.02em;
-    }
-    p{color:var(--muted); line-height:1.6}
-    ul{margin:0; padding-left:18px; color:var(--muted); line-height:1.6}
-    @media(max-width:900px){ .grid{grid-template-columns:1fr} }
-
-    /* =========================================================
-       n8n CHAT – WICHTIG:
-       n8n nutzt CSS Variablen (z.B. --chat--toggle--background).
-       Deshalb überschreiben wir Variablen DIREKT auf #n8n-chat.
-       ========================================================= */
-
-    /* Theme-Variablen (hart überschreiben) */
+    /* ===============================
+       n8n CHAT – VARIABLEN (WICHTIG)
+       =============================== */
     #n8n-chat{
       --chat--font-family: inherit !important;
+
+      --chat--window--background: var(--chat-bg) !important;
+      --chat--border-color: var(--chat-border) !important;
 
       --chat--text-color: var(--chat-text) !important;
       --chat--muted-color: var(--chat-muted) !important;
 
-      --chat--window--background: var(--chat-panel) !important;
-      --chat--border-color: var(--chat-border) !important;
-
-      /* Toggle Button (Floating Icon) */
-      --chat--toggle--background: rgba(255,255,255,.08) !important;
-      --chat--toggle--color: var(--chat-text) !important;
-      --chat--toggle--border: 1px solid rgba(255,255,255,.20) !important;
-
-      /* Header */
-      --chat--header--background: rgba(255,255,255,.06) !important;
-      --chat--header--color: var(--chat-text) !important;
-
-      /* Messages */
       --chat--messages--background: var(--chat-bg) !important;
 
-      /* Bubbles */
-      --chat--message--bot--background: var(--chat-bot) !important;
-      --chat--message--bot--color: var(--chat-text) !important;
-      --chat--message--user--background: var(--chat-user) !important;
+      --chat--message--user--background: var(--bubble-user) !important;
       --chat--message--user--color: var(--chat-text) !important;
 
-      /* Input */
-      --chat--input--background: rgba(255,255,255,.04) !important;
+      --chat--message--bot--background: var(--bubble-bot) !important;
+      --chat--message--bot--color: var(--chat-text) !important;
+
+      --chat--input--background: #1a1c20 !important;
       --chat--input--text-color: var(--chat-text) !important;
       --chat--input--placeholder-color: var(--chat-muted) !important;
 
-      /* Send Button */
-      --chat--input--send-button--background: transparent !important;
-      --chat--input--send-button--color: var(--chat-accent) !important;
-      --chat--input--send-button--background-hover: rgba(255,255,255,.08) !important;
-      --chat--input--send-button--color-hover: var(--chat-accent) !important;
+      --chat--toggle--background: #1a1c20 !important;
+      --chat--toggle--color: #ffffff !important;
 
-      /* Position (wenn unterstützt) */
-      --chat--button-right: var(--chat-gap) !important;
-      --chat--button-bottom: var(--chat-gap) !important;
+      --chat--button-right: var(--gap) !important;
+      --chat--button-bottom: var(--gap) !important;
     }
 
-    /* Window-Container / Wrapper (dein Screenshot zeigt .chat-window-wrapper etc.) */
-    #n8n-chat .chat-window-wrapper{
-      position: fixed !important;
-      right: var(--chat-gap) !important;
-      bottom: var(--chat-gap) !important;
-      left: auto !important;
-      z-index: 9999 !important;
-      font-family: inherit !important;
-    }
-
-    /* Das eigentliche Fenster */
+    /* Fenster */
     #n8n-chat .chat-window{
-      width: var(--chat-width) !important;
-      height: var(--chat-height) !important;
-      max-width: calc(100vw - (var(--chat-gap) * 2)) !important;
-      max-height: calc(100vh - (var(--chat-gap) * 2)) !important;
-
-      border-radius: 18px !important;
-      overflow: hidden !important;
-
-      box-shadow: var(--shadow) !important;
-      border: 1px solid var(--chat-border) !important;
-      background: var(--chat-panel) !important;
-      color: var(--chat-text) !important;
-      backdrop-filter: blur(10px) !important;
+      width:var(--chat-width)!important;
+      height:var(--chat-height)!important;
+      border-radius:18px!important;
+      box-shadow:var(--shadow)!important;
+      border:1px solid var(--chat-border)!important;
+      background:var(--chat-bg)!important;
+      overflow:hidden!important;
     }
 
-    /* Toggle Button (Floating Button) – n8n nutzt .chat-window-toggle */
+    /* HEADER KOMPLETT AUS */
+    #n8n-chat .chat-header{
+      display:none!important;
+    }
+
+    /* Messages */
+    #n8n-chat .chat-messages{
+      background:var(--chat-bg)!important;
+    }
+
+    /* Bubbles */
+    #n8n-chat .chat-message{
+      border-radius:14px!important;
+      font-size:13px!important;
+      line-height:1.45!important;
+    }
+
+    /* Input */
+    #n8n-chat .chat-input{
+      background:#1a1c20!important;
+      border-top:1px solid var(--chat-border)!important;
+    }
+
+    #n8n-chat .chat-input textarea,
+    #n8n-chat .chat-input input{
+      background:transparent!important;
+      color:#fff!important;
+      border:none!important;
+      outline:none!important;
+    }
+
+    /* Send Button */
+    #n8n-chat .chat-input-send-button{
+      background:transparent!important;
+      border:1px solid rgba(255,255,255,.25)!important;
+      border-radius:10px!important;
+    }
+
+    #n8n-chat .chat-input-send-button svg{
+      fill:#fff!important;
+    }
+
+    /* Floating Button */
     #n8n-chat .chat-window-toggle{
-      width: 56px !important;
-      height: 56px !important;
-      border-radius: 999px !important;
-      box-shadow: 0 14px 35px rgba(0,0,0,.6) !important;
-      border: 1px solid rgba(255,255,255,.20) !important;
-      background: rgba(255,255,255,.08) !important;
-      color: var(--chat-text) !important;
-      position: relative !important;
-      overflow: hidden !important;
+      width:56px!important;
+      height:56px!important;
+      border-radius:999px!important;
+      background:#1a1c20!important;
+      border:1px solid rgba(255,255,255,.25)!important;
+      box-shadow:var(--shadow)!important;
+      position:relative!important;
     }
 
-    /* Original Icon ausblenden (SVG) */
-    #n8n-chat .chat-window-toggle svg,
-    #n8n-chat .chat-window-toggle img{
-      display:none !important;
+    #n8n-chat .chat-window-toggle svg{
+      display:none!important;
     }
 
-    /* Barber Emoji rein */
     #n8n-chat .chat-window-toggle::after{
       content:"💈";
-      font-size: 20px;
-      line-height: 1;
+      font-size:20px;
       position:absolute;
       inset:0;
       display:grid;
       place-items:center;
     }
-
-    /* Header dezenter */
-    #n8n-chat .chat-header{
-      background: rgba(255,255,255,.06) !important;
-      border-bottom: 1px solid var(--chat-border) !important;
-      color: var(--chat-text) !important;
-    }
-
-    /* Gesamte Typo (kleiner, sauber) */
-    #n8n-chat, #n8n-chat *{
-      font-family: inherit !important;
-      font-size: 13px !important;
-      line-height: 1.45 !important;
-    }
-
-    /* Messages Fläche */
-    #n8n-chat .chat-messages{
-      background: var(--chat-bg) !important;
-      color: var(--chat-text) !important;
-    }
-
-    /* Bubbles (Fallback falls Variablen nicht reichen) */
-    #n8n-chat .chat-message--bot{
-      background: var(--chat-bot) !important;
-      color: var(--chat-text) !important;
-      border: 1px solid rgba(255,255,255,.10) !important;
-      border-radius: 14px !important;
-    }
-    #n8n-chat .chat-message--user{
-      background: var(--chat-user) !important;
-      color: var(--chat-text) !important;
-      border: 1px solid rgba(255,255,255,.14) !important;
-      border-radius: 14px !important;
-    }
-
-    /* Input */
-    #n8n-chat .chat-input{
-      background: rgba(255,255,255,.04) !important;
-      border-top: 1px solid var(--chat-border) !important;
-    }
-    #n8n-chat .chat-input textarea,
-    #n8n-chat .chat-input input{
-      background: transparent !important;
-      color: var(--chat-text) !important;
-      border: none !important;
-      outline: none !important;
-    }
-    #n8n-chat .chat-input textarea::placeholder,
-    #n8n-chat .chat-input input::placeholder{
-      color: var(--chat-muted) !important;
-    }
-
-    /* Send Button (Fallback) */
-    #n8n-chat .chat-input-send-button{
-      background: transparent !important;
-      border: 1px solid rgba(255,255,255,.22) !important;
-      color: var(--chat-accent) !important;
-      border-radius: 12px !important;
-    }
-    #n8n-chat .chat-input-send-button svg,
-    #n8n-chat .chat-input-send-button svg *{
-      fill: var(--chat-accent) !important;
-      stroke: var(--chat-accent) !important;
-    }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="bar">
-      <strong>Conar Friseur 💈</strong>
-      <div class="chips">
-        <div class="chip">Mo–Fr · 08:00–16:00</div>
-        <div class="chip">Musterstraße 14</div>
-        <div class="chip">Tel: 01211234567</div>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <section class="grid">
-      <div class="card">
-        <h1>Haare, die sitzen. Service, der passt.</h1>
-        <p>Professionelle Schnitte und Stylings in ruhiger Atmosphäre.</p>
-      </div>
-
-      <div class="card">
-        <strong>Auf einen Blick</strong>
-        <ul>
-          <li>Team: Jason, Elina</li>
-          <li>Adresse: Musterstraße 14</li>
-          <li>Öffnungszeiten: Mo–Fr 08:00–16:00</li>
-          <li>Kontakt: Musteremail@muster.de</li>
-        </ul>
-      </div>
-    </section>
-  </main>
 
   <!-- n8n Embedded Chat -->
   <script type="module">
@@ -307,14 +152,15 @@
     createChat({
       webhookUrl: "https://conner1005.app.n8n.cloud/webhook/e76ac4f7-7502-4340-a298-a78f2d08c432/chat",
       mode: "window",
-      chatInputPlaceholder: "Schreib deine Nachricht…",
+      chatInputPlaceholder: "Nachricht schreiben…",
       initialMessages: [
-        "Willkommen bei Conar Friseur 💈",
-        "Ich bin dir gerne behilflich bei:",
-        "• Termin buchen / löschen / umschieben",
-        "• Informationen über unseren Salon"
+        "👋 Willkommen bei Conar Friseur 💈",
+        "✂️ Ich helfe dir gerne bei:",
+        "• Termin buchen / ändern / stornieren",
+        "• Infos zu Öffnungszeiten & Team"
       ]
     });
   </script>
+
 </body>
 </html>
