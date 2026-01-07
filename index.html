@@ -23,6 +23,8 @@
   --chat-height:min(78vh,720px);
 }
 
+*{ box-sizing:border-box; }
+
 body{
   margin:0;
   min-height:100vh;
@@ -31,90 +33,104 @@ body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
 }
 
-/* ================= SELECTION OVERLAY ================= */
-
-#chat-select{
-  position:fixed;
-  right:var(--gap);
-  bottom:var(--gap);
-  width:var(--chat-width);
-  height:var(--chat-height);
-  background:var(--chat-bg);
-  border:1px solid var(--chat-border);
-  border-radius:18px;
-  box-shadow:var(--shadow);
-  z-index:99999;
-  display:flex;
-  flex-direction:column;
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:56px 18px 120px;
 }
 
-#chat-select header{
-  padding:16px;
-  border-bottom:1px solid var(--chat-border);
-  font-size:14px;
-  color:var(--muted);
+h1{
+  margin:0 0 10px;
+  font-size:clamp(34px,4.2vw,56px);
 }
 
-#chat-select main{
-  flex:1;
-  display:grid;
-  place-items:center;
-  gap:16px;
+p{
+  margin:0;
+  color:rgba(255,255,255,.65);
+  max-width:60ch;
 }
+</style>
+</head>
 
-.choice{
-  width:80%;
-  padding:18px;
-  text-align:center;
-  background:var(--bubble);
-  border:1px solid var(--bubble-border);
-  border-radius:14px;
-  cursor:pointer;
-  font-size:15px;
+<body>
+
+<div class="wrap">
+  <h1>Conar Friseur</h1>
+  <p>Termine buchen / ändern / stornieren direkt im Chat unten rechts.</p>
+</div>
+
+<!-- ✅ EXPLIZITER MOUNT -->
+<div id="n8n-chat-root"></div>
+
+<script type="module">
+import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
+
+const initChat = () => {
+  createChat({
+    target: "#n8n-chat-root",   // 🔴 DAS WAR DER FEHLENDE PUNKT
+    webhookUrl: "https://conner1005.app.n8n.cloud/webhook-test/conar-chat",
+    mode: "window",
+    openOnLoad: false,
+    chatInputPlaceholder: "Nachricht schreiben…",
+    initialMessages: [
+`👋 Willkommen bei Conar Friseur 💈
+Schön, dass du da bist 😊
+Ich helfe dir gern bei Infos oder Terminen ✂️📆`
+    ]
+  });
+};
+
+/* 🔒 DOM READY – wichtig für GitHub Pages */
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initChat);
+} else {
+  initChat();
 }
+</script>
 
-.choice:hover{ filter:brightness(1.1); }
+<style>
+/* ================= CHAT DESIGN (UNVERÄNDERT) ================= */
 
-/* ================= CHAT OVERRIDES ================= */
+#n8n-chat, #n8n-chat *{
+  font-family: inherit !important;
+}
 
 #n8n-chat .chat-window-wrapper{
-  position:fixed !important;
-  right:var(--gap)!important;
-  bottom:var(--gap)!important;
-  z-index:99999!important;
+  position: fixed !important;
+  right: var(--gap) !important;
+  bottom: var(--gap) !important;
+  z-index: 99999 !important;
 }
 
 #n8n-chat .chat-window{
-  width:var(--chat-width)!important;
-  height:var(--chat-height)!important;
-  background:var(--chat-bg)!important;
-  border-radius:18px!important;
-  border:1px solid var(--chat-border)!important;
-  box-shadow:var(--shadow)!important;
+  width: var(--chat-width) !important;
+  height: var(--chat-height) !important;
+  background: var(--chat-bg) !important;
+  border-radius: 18px !important;
+  border: 1px solid var(--chat-border) !important;
+  box-shadow: var(--shadow) !important;
 }
 
-#n8n-chat .chat-header{ display:none!important; }
+#n8n-chat .chat-header{ display:none !important; }
 
 #n8n-chat .chat-message{
-  background:var(--bubble)!important;
-  border:1px solid var(--bubble-border)!important;
-  border-radius:14px!important;
-  font-size:13px!important;
+  background: var(--bubble) !important;
+  border: 1px solid var(--bubble-border) !important;
+  border-radius: 14px !important;
+  font-size: 13px !important;
 }
 
 #n8n-chat .chat-window-toggle{
-  position:fixed!important;
-  right:var(--gap)!important;
-  bottom:var(--gap)!important;
-  width:56px!important;
-  height:56px!important;
-  border-radius:999px!important;
-  background:var(--input-bg)!important;
-  border:1px solid rgba(255,255,255,.25)!important;
-  box-shadow:var(--shadow)!important;
+  width:56px !important;
+  height:56px !important;
+  border-radius:999px !important;
+  background: var(--input-bg) !important;
+  border:1px solid rgba(255,255,255,.25) !important;
+  box-shadow: var(--shadow) !important;
 }
 
-#n8n-chat .chat-window-toggle svg{ display:none!important; }
+#n8n-chat .chat-window-toggle svg{ display:none !important; }
+
 #n8n-chat .chat-window-toggle::after{
   content:"💈";
   display:grid;
@@ -122,74 +138,7 @@ body{
   height:100%;
   font-size:20px;
 }
-
-/* BACK ARROW */
-#back-btn{
-  position:absolute;
-  top:12px;
-  left:12px;
-  cursor:pointer;
-  font-size:18px;
-  color:var(--muted);
-}
 </style>
-</head>
 
-<body>
-
-<!-- SELECTION -->
-<div id="chat-select">
-  <header>
-    👋 Willkommen bei Conar Friseur  
-    <br>Wähle, wie ich dir helfen soll
-  </header>
-  <main>
-    <div class="choice" data-mode="info">ℹ️ Infos</div>
-    <div class="choice" data-mode="jason">✂️ Termin bei Jason</div>
-    <div class="choice" data-mode="elina">✂️ Termin bei Elina</div>
-  </main>
-</div>
-
-<script type="module">
-import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
-
-let chatInstance = null;
-
-const startChat = (mode) => {
-  document.getElementById("chat-select").style.display = "none";
-
-  chatInstance = createChat({
-    webhookUrl: `https://conner1005.app.n8n.cloud/webhook-test/conar-chat?mode=${mode}`,
-    mode:"window",
-    openOnLoad:true,
-    initialMessages:[
-      mode==="info"  ? "ℹ️ Ich gebe dir Infos zu Conar Friseur 😊"
-    : mode==="jason"? "✂️ Hi, ich bin Jason. Lass uns deinen Termin planen 😊"
-    :                "✂️ Hi, ich bin Elina. Ich kümmere mich um deinen Termin 😊"
-    ]
-  });
-
-  setTimeout(addBackButton,300);
-};
-
-const addBackButton = () => {
-  if(document.getElementById("back-btn")) return;
-  const w = document.querySelector("#n8n-chat .chat-window");
-  if(!w) return;
-
-  const btn = document.createElement("div");
-  btn.id = "back-btn";
-  btn.innerHTML = "←";
-  btn.onclick = () => {
-    document.getElementById("chat-select").style.display = "flex";
-    document.querySelector("#n8n-chat")?.remove();
-  };
-  w.appendChild(btn);
-};
-
-document.querySelectorAll(".choice").forEach(c=>{
-  c.onclick = () => startChat(c.dataset.mode);
-});
-</script>
 </body>
 </html>
